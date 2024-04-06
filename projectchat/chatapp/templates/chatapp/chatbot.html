@@ -1,0 +1,373 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBot</title>
+    <link rel="stylesheet" href="https://design.ecloudsoft.com/chatbot/04/scss/style.css">
+</head>
+
+<body class="antialiased">
+
+    <section class="relative z-0 flex h-full w-full overflow-hidden mainContent">
+        <div class="dark flex-shrink-0 overflow-x-hidden bg-black sidebar">
+            <div class="outer h-full">
+                <div class="inner flex h-full flex-col">
+
+                    <div class="flex-col pr-2 overflow-y-auto flex-1">
+                        <div class="sticky">
+                            <div class="profile">
+                                <div class="profile-box">
+                                    <div class="icon">
+                                        <img src="images/stella.png" alt="">
+                                    </div>
+                                    <a href="/">
+                                        <div class="name">HOME</div>
+                                    </a>
+                                    <a href="/history/">
+                                        <div class="name">HISTORY</div>
+                                    </a>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom-sticky flex flex-col">
+                        <div class="profile button-group">
+
+                            <button class="profile-box" onclick="toggleButtonMore('button-more-2')">
+                                <div class="icon">
+                                    <img src="https://design.ecloudsoft.com/chatbot/04/images/profile.jpg" alt="">
+                                </div>
+                                <div class="name">KEVIN BENNY</div>
+                            </button>
+
+                            <div class="button-more" id="button-more-2">
+                                <a href="#">
+                                    <i>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="icon-md">
+                                            <path d="M11.6439 3C10.9352 3 10.2794 3.37508 9.92002 3.98596L9.49644 4.70605C8.96184 5.61487 7.98938 6.17632 6.93501 6.18489L6.09967 6.19168C5.39096 6.19744 4.73823 6.57783 4.38386 7.19161L4.02776 7.80841C3.67339 8.42219 3.67032 9.17767 4.01969 9.7943L4.43151 10.5212C4.95127 11.4386 4.95127 12.5615 4.43151 13.4788L4.01969 14.2057C3.67032 14.8224 3.67339 15.5778 4.02776 16.1916L4.38386 16.8084C4.73823 17.4222 5.39096 17.8026 6.09966 17.8083L6.93502 17.8151C7.98939 17.8237 8.96185 18.3851 9.49645 19.294L9.92002 20.014C10.2794 20.6249 10.9352 21 11.6439 21H12.3561C13.0648 21 13.7206 20.6249 14.08 20.014L14.5035 19.294C15.0381 18.3851 16.0106 17.8237 17.065 17.8151L17.9004 17.8083C18.6091 17.8026 19.2618 17.4222 19.6162 16.8084L19.9723 16.1916C20.3267 15.5778 20.3298 14.8224 19.9804 14.2057L19.5686 13.4788C19.0488 12.5615 19.0488 11.4386 19.5686 10.5212L19.9804 9.7943C20.3298 9.17767 20.3267 8.42219 19.9723 7.80841L19.6162 7.19161C19.2618 6.57783 18.6091 6.19744 17.9004 6.19168L17.065 6.18489C16.0106 6.17632 15.0382 5.61487 14.5036 4.70605L14.08 3.98596C13.7206 3.37508 13.0648 3 12.3561 3H11.6439Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+                                            <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="2"></circle>
+                                        </svg>
+                                    </i>Settings
+                                </a>
+                                <div class="line"></div>
+                                <a href="#">
+                                    <i>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg" class="icon-md">
+                                            <path d="M11 3H7C5.89543 3 5 3.89543 5 5V19C5 20.1046 5.89543 21 7 21H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                                            <path d="M20 12H11M20 12L16 16M20 12L16 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </i>Log Out
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="relative flex h-full overflow-hidden chat-container">
+            <main class="relative h-full w-full flex-1 overflow-auto chat-container-inner">
+                <div class="flex h-full flex-col" role="presentation">
+
+                    <div class="flex-1 overflow-hidden">
+                        <div class="flex h-full flex-col items-center justify-center">
+                            <div class="w-full" style="height: 400px; overflow-y: scroll;" id="chat-container">
+
+                                <div class="chat-landing">
+                                    <h6>How can I help you today?</h6>
+                                    <div class="icon">
+                                        <img src="images/stella.png" alt="">
+                                    </div>
+                                </div>
+
+                                {% for conversation in conversations %}
+                                <div class="container">
+                                    <p>{{ conversation.question }}</p>
+                                    <span class="time-right">{{ conversation.time|date:'H:i' }}</span>
+                                </div>
+                                <div class="container">
+                                    <p>{{ conversation.answer }}</p>
+                                    <span class="time-left">{{ conversation.time|date:'H:i' }}</span>
+                                </div>                                
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- input section -->
+                    <div class="w-full">
+                        <div class="form-box">
+
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group relative">
+
+                                    <button class="voice-btn" type="button" onclick="startVoice()">
+                                        <span>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.782 5C11.1683 5 10.5798 5.24378 10.1459 5.6777C9.71194 6.11163 9.46816 6.70016 9.46816 7.31383V12.25C9.46816 12.8637 9.71194 13.4522 10.1459 13.8861C10.5798 14.3201 11.1683 14.5638 11.782 14.5638C12.3957 14.5638 12.9842 14.3201 13.4181 13.8861C13.852 13.4522 14.0958 12.8637 14.0958 12.25V7.31383C14.0958 6.70016 13.852 6.11163 13.4181 5.6777C12.9842 5.24378 12.3957 5 11.782 5ZM10.8003 6.33215C11.0607 6.0718 11.4138 5.92553 11.782 5.92553C12.1502 5.92553 12.5033 6.0718 12.7637 6.33215C13.024 6.59251 13.1703 6.94563 13.1703 7.31383V12.25C13.1703 12.6182 13.024 12.9713 12.7637 13.2317C12.5033 13.492 12.1502 13.6383 11.782 13.6383C11.4138 13.6383 11.0607 13.492 10.8003 13.2317C10.54 12.9713 10.3937 12.6182 10.3937 12.25V7.31383C10.3937 6.94563 10.54 6.59251 10.8003 6.33215Z" fill="#1f2027" />
+                                                <path d="M7.92553 11.016C7.92553 10.7604 7.71834 10.5532 7.46277 10.5532C7.20719 10.5532 7 10.7604 7 11.016V12.25C7 13.5182 7.50381 14.7345 8.40059 15.6313C9.18766 16.4184 10.2209 16.9028 11.3193 17.0095V18.5745H9.31388C9.05831 18.5745 8.85112 18.7817 8.85112 19.0373C8.85112 19.2928 9.05831 19.5 9.31388 19.5H14.2501C14.5056 19.5 14.7128 19.2928 14.7128 19.0373C14.7128 18.7817 14.5056 18.5745 14.2501 18.5745H12.2448V17.0095C13.3431 16.9027 14.3762 16.4183 15.1632 15.6313C16.06 14.7345 16.5638 13.5182 16.5638 12.25V11.016C16.5638 10.7604 16.3566 10.5532 16.1011 10.5532C15.8455 10.5532 15.6383 10.7604 15.6383 11.016V12.25C15.6383 13.2728 15.232 14.2537 14.5088 14.9769C13.7856 15.7001 12.8047 16.1064 11.7819 16.1064C10.7591 16.1064 9.77825 15.7001 9.05504 14.9769C8.33183 14.2537 7.92553 13.2728 7.92553 12.25V11.016Z" fill="#1f2027" />
+                                            </svg>
+                                        </span>
+                                    </button>
+
+                                    <input type="text" class="form-control" name="question" id="question" placeholder="Type your question here...">
+                                    
+                                    <button type="submit" class="submit-btn">
+                                        <span>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M18.8697 5.12943C18.9314 5.19124 18.9736 5.26982 18.991 5.35541C19.0085 5.441 19.0004 5.52982 18.9678 5.61085L13.7806 18.5798C13.7349 18.694 13.6586 18.7934 13.56 18.8671C13.4615 18.9407 13.3445 18.9857 13.2221 18.9971C13.0996 19.0085 12.9763 18.986 12.8659 18.9318C12.7554 18.8777 12.662 18.7942 12.5959 18.6904L9.76304 14.2372L5.31044 11.404C5.20643 11.338 5.12266 11.2445 5.06839 11.1339C5.01412 11.0234 4.99145 10.8999 5.00289 10.7773C5.01432 10.6546 5.05941 10.5375 5.13319 10.4389C5.20697 10.3402 5.30656 10.2639 5.42097 10.2182L18.3883 5.03225C18.4694 4.99963 18.5582 4.99154 18.6437 5.00897C18.7293 5.02641 18.8079 5.06771 18.8697 5.12943ZM10.6527 13.9769L13.1139 17.8443L17.3329 7.29583L10.6527 13.9769ZM16.7027 6.66552L6.1555 10.8851L10.0233 13.3457L16.7027 6.66552Z" fill="white" />
+                                            </svg>
+                                        </span>
+                                    </button>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <div class="dark flex-shrink-0 overflow-x-hidden bg-black sidebar">
+            <div class="outer h-full">
+                <div class="inner flex h-full flex-col">
+
+                    <div class="bottom-sticky flex-col flex-1">
+                        <div class="price-button">
+                            <button class="pricing" onclick="togglePopup()">Upgrade Plan</button>
+                        </div>
+                    </div>
+
+                    <div class="flex-col pr-2 overflow-y-auto">
+                        <div class="stella-img">
+                            <a href="#"><img src="https://design.ecloudsoft.com/chatbot/04/images/ai-stella.png" alt=""></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="upgradePopup" class="popup">
+        <div class="flex w-full h-full items-center justify-center popup-outer">
+            <div class="popup-inner">
+
+                <div class="popup-header">
+                    <h3>Upgrade your plan</h3>
+                    <button onclick="togglePopup()">
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                            stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" height="1em" width="1em"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="popup-content">
+                    <div class="flex flex-col flex-row">
+
+                        <div class="price-col flex flex-col flex-1 relative">
+
+                            <div class="price-title flex flex-col">
+                                <h4>Free</h4>
+                                <p>USD $0/month</p>
+                            </div>
+
+                            <div class="price-button flex flex-col relative">
+                                <button class="btn btn-disabled" disabled>
+                                    <div class="w-full justify-center items-center">Your current plan</div>
+                                </button>
+                            </div>
+
+                            <div class="price-features">
+                                <p>For people just getting started with Stella</p>
+                                <ul>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Unlimited messages, interactions, and history</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access to our GPT-3.5 model</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access on Web, iOS, and Android</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="price-col flex flex-col flex-1 relative">
+
+                            <div class="price-title flex flex-col">
+                                <h4>Plus</h4>
+                                <p>USD $20/month</p>
+                            </div>
+
+                            <div class="price-button flex flex-col relative">
+                                <button class="btn btn-plus">
+                                    <div class="w-full justify-center items-center">Upgrade to Plus</div>
+                                </button>
+                            </div>
+
+                            <div class="price-features">
+                                <p>Everything in Free, and:</p>
+                                <ul>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Unlimited messages, interactions, and history</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access to our GPT-3.5 model</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access on Web, iOS, and Android</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="price-col flex flex-col flex-1 relative">
+
+                            <div class="price-title flex flex-col">
+                                <h4>Team</h4>
+                                <p>USD $25 per person/month*</p>
+                            </div>
+
+                            <div class="price-button flex flex-col relative">
+                                <button class="btn btn-team">
+                                    <div class="w-full justify-center items-center">Upgrade to Team</div>
+                                </button>
+                            </div>
+
+                            <div class="price-features">
+                                <p>Everything in Free, and:</p>
+                                <ul>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Unlimited messages, interactions, and history</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access to our GPT-3.5 model</span>
+                                    </li>
+                                    <li>
+                                        <span class="icon"><svg stroke="currentColor" fill="none" stroke-width="2"
+                                                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
+                                                class="mr-2 mt-1 h-4 w-4" height="1em" width="1em"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg></span>
+                                        <span class="text">Access on Web, iOS, and Android</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startVoice()
+        {
+            var recognition = new webkitSpeechRecognition();
+            recognition.onresult = function(event)
+            {
+                document.getElementById('question').value = event.results[0][0].transcript;
+            }
+            recognition.start();
+        }
+    </script>  
+
+    <script>
+        function toggleButtonMore(buttonMoreId)
+        {
+            var buttonMore = document.getElementById(buttonMoreId);
+            if (buttonMore)
+            {
+                buttonMore.style.display = (buttonMore.style.display === 'none' || buttonMore.style.display === '') ?
+                    'block' : 'none';
+            }
+        }
+        function togglePopup()
+        {
+            var popup = document.getElementById("upgradePopup");
+            if (popup.style.display === "none" || popup.style.display === "")
+            {
+                popup.style.display = "block";
+            }
+            else
+            {
+                popup.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
